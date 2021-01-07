@@ -9,4 +9,3 @@ class PersonSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Person
         fields = ('email', 'name', 'password', 'profile_image')
-        # fields = ('email', 'name', 'password')
