@@ -15,8 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from myapp.views import PostViewSet
+
+router = routers.DefaultRouter()
+router.register('myapp', PostViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('myapp.urls'))
+    path('api/', include(router.urls))
 ]
+
+# GET/api/myapp/ 글 리스트 조회
+# POST/api/myapp/ 글 추가
+# GET/api/myapp/{pk} 글 객체 조회
+# PUT/api/myapp/{pk} 글 객체 수정
+# DELETE/api/myapp/{pk} 글 객체 삭제
