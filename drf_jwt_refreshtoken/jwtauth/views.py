@@ -1,15 +1,16 @@
-from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from jwtauth.models import User
+from jwtauth.serializers import UserCreateSerializer
+
 
 @api_view(['POST'])
-@permission_classes(AllowAny,)
+@permission_classes([AllowAny])
 def create_user(request):
     if request.method == 'POST':
-        from jwtauth.serializers import UserCreateSerializer
         serializer = UserCreateSerializer(data=request.data)
         if not serializer.is_valid(raise_exception=True):
             return Response({"message": "request error"}, status=status.HTTP_409_CONFLICT)
