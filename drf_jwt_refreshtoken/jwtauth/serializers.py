@@ -4,11 +4,6 @@ from rest_framework_jwt.settings import api_settings
 from django.contrib.auth import get_user_model, authenticate
 from .models import User
 
-User = get_user_model()
-
-JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
-JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
-
 
 class UserCreateSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
@@ -26,8 +21,12 @@ class UserCreateSerializer(serializers.Serializer):
         return user
 
 
+JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
+JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
+
+
 class UserLoginSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True),
+    email = serializers.CharField(max_length=45),
     password = serializers.CharField(max_length=150, write_only=True),
     token = serializers.CharField(max_length=250, read_only=True)
 
@@ -38,7 +37,7 @@ class UserLoginSerializer(serializers.Serializer):
 
         if user is None:
             return{
-                "user": "None"
+                'email': 'None'
             }
         try:
             payload = JWT_PAYLOAD_HANDLER(user)
@@ -49,6 +48,6 @@ class UserLoginSerializer(serializers.Serializer):
                 'User does not exists'
             )
         return{
-            "email": user.email,
-            "token": jwt_token
+            'email': user.email,
+            'token': jwt_token
         }
