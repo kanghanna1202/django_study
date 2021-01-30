@@ -4,5 +4,5 @@ from jwtauth import views
 
 urlpatterns = [
     path('register/', views.create_user),
-    path('login/', views.login_user),
+    path('login/', views.login),
 ]
