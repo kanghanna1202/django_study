@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -9,8 +10,9 @@ from api.models import Bucketlist
 class ModelTestCase(TestCase):
 
     def setUp(self):
-        self.bucketlist_name = "Write world class code"
-        self.bucketlist = Bucketlist(name=self.bucketlist_name)
+        user = User.objects.create(username="nerd")
+        self.name = "Write world class code"
+        self.bucketlist = Bucketlist(name=self.name, owner=user)
 
     def test_model_can_create_a_bucketlist(self):
         old_count = Bucketlist.objects.count()
@@ -22,8 +24,13 @@ class ModelTestCase(TestCase):
 class ViewTestCase(TestCase):
 
     def setUp(self):
+        user = User.objects.create(username="mallang")
+
         self.client = APIClient()
-        self.bucketlist_data = {'name': 'Go to Ibiza'}
+        self.client.force_authenticate(user=user)
+
+        self.bucketlist_data = {'name': 'Go to Ibiza', 'owner': user.id}
+
         self.response = self.client.post(
             reverse('create'),
             self.bucketlist_data,
