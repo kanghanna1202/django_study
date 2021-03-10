@@ -40,6 +40,15 @@ class ViewTestCase(TestCase):
     def test_api_can_create_a_bucketlist(self):
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
 
+    def test_authorization_is_enforced(self):
+        new_client = APIClient()
+        response = new_client.get(
+            '/bucketlists/',
+            kwargs={'pk': 3},
+            format="json"
+        )
+        self.assertEqual(response)
+
     def test_api_can_get_a_bucketlist(self):
         bucketlist = Bucketlist.objects.all()
         response = self.client.get(
