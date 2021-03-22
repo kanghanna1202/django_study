@@ -35,11 +35,13 @@ def movie_list(request):
 @api_view(['POST'])
 def search_movie(request):
 
+    print(request.data['title'])
+
     ServiceKey = my_settings.SERVICE_KEY
-    search = urllib.parse.quote(request.title)
+    title = urllib.parse.quote(request.data['title'])
 
     url = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2" \
-          + "&ServiceKey=" + ServiceKey + "&query" + search
+          + "&ServiceKey=" + ServiceKey + "&query=" + title
 
     request = urllib.request.Request(url)
     response = urllib.request.urlopen(request)
