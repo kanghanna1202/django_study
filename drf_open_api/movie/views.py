@@ -6,12 +6,16 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from drf_open_api import my_settings
+
 
 @csrf_exempt
 @api_view(['GET'])
 def movie_list(request):
-    url = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2" \
-          "&ServiceKey=인증키"
+    ServiceKey = my_settings.SERVICE_KEY
+
+    url = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2"\
+          + "&ServiceKey=" + ServiceKey + "&listCount=3"
 
     request = urllib.request.Request(url)
     response = urllib.request.urlopen(request)
