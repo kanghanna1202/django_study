@@ -35,8 +35,6 @@ def movie_list(request):
 @api_view(['POST'])
 def search_movie(request):
 
-    print(request.data['title'])
-
     ServiceKey = my_settings.SERVICE_KEY
     title = urllib.parse.quote(request.data['title'])
 
