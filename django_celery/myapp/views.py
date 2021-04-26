@@ -1,19 +1,12 @@
 import json
 import urllib
 
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from django.http import HttpResponse, JsonResponse
 
 from django_celery import my_settings
 
 
-@csrf_exempt
-@api_view(['GET'])
-def movie_list(request):
-
+def movie_list(self):
     service_key = my_settings.SERVICE_KEY
 
     url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json" \
@@ -26,8 +19,7 @@ def movie_list(request):
 
     if rescode == 200:
         response_body = response.read()
-        dict = json.loads(response_body.decode('utf-8'))
-        print(dict['movieListResult']['movieList'])
-        return Response(dict['movieListResult']['movieList'], status=status.HTTP_200_OK)
+        dict = json.loads(response_body.decode('utf-8'))['movieListResult']['movieList']
+        return HttpResponse(status=201)
     else:
-        return Response(rescode, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({"message": rescode}, status=400)
